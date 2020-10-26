@@ -6,11 +6,12 @@
   "author": "Eyes0n <eye3570@naver.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node src",
-    "start:dev": "nodemon --watch src/ src/index.js"
+    "start": "node -r esm src",
+    "start:dev": "nodemon --watch src/ -r esm src/index.js"
   },
   "dependencies": {
     "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
     "koa-router": "^9.4.0",
