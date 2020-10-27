@@ -65,18 +65,17 @@ export const list = async (ctx) => {
       .sort({ _id: -1 }) // { key: 1 or -1 }: key=정렬할 필드 1=오름차순 -1=내림차순
       .limit(10) // 갯수 제한
       .skip((page - 1) * 10) // 처음부터 (해당 인수-1)개수를 제외하고 그 다음 데이터 불러옴
+      .lean() // return plain javascript objects, not Mongoose Documents.
       .exec();
 
     // 마지막 페이지 알려주기
     const postCount = await Post.countDocuments().exec();
     ctx.set('Last-Page', Math.ceil(postCount / 10)); // 커스텀헤더 설정으로 알리기
-    ctx.body = posts
-      .map((post) => post.toJSON())
-      .map((post) => ({
-        ...post,
-        body:
-          post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`,
-      }));
+    ctx.body = posts.map((post) => ({
+      ...post,
+      body:
+        post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`,
+    }));
   } catch (e) {
     ctx.throw(500, e);
   }
