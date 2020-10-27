@@ -66,6 +66,10 @@ export const list = async (ctx) => {
       .limit(10) // 갯수 제한
       .skip((page - 1) * 10) // 처음부터 (해당 인수-1)개수를 제외하고 그 다음 데이터 불러옴
       .exec();
+
+    // 마지막 페이지 알려주기
+    const postCount = await Post.countDocuments().exec();
+    ctx.set('Last-Page', Math.ceil(postCount / 10)); // 커스텀헤더 설정으로 알리기
     ctx.body = posts;
   } catch (e) {
     ctx.throw(500, e);
