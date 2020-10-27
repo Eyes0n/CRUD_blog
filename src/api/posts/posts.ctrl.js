@@ -51,10 +51,20 @@ export const write = async (ctx) => {
 GET /api/posts
 */
 export const list = async (ctx) => {
+  // query 는 문자열이기 때문에 숫자로 변환해주어야합니다.
+  // 값이 주어지지 않았다면 1 을 기본으로 사용합니다.
+  const page = parseInt(ctx.query.page || '1', 10);
+
+  if (page < 1) {
+    ctx.status = 400;
+    return;
+  }
+
   try {
     const posts = await Post.find()
       .sort({ _id: -1 }) // { key: 1 or -1 }: key=정렬할 필드 1=오름차순 -1=내림차순
       .limit(10) // 갯수 제한
+      .skip((page - 1) * 10) // 처음부터 (해당 인수-1)개수를 제외하고 그 다음 데이터 불러옴
       .exec();
     ctx.body = posts;
   } catch (e) {
