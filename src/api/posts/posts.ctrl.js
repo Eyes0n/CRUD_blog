@@ -1,4 +1,16 @@
 import Post from '../../models/post';
+import mongoose from 'mongoose';
+
+const { objectId } = mongoose.Types;
+
+export const checkObjectId = (ctx, next) => {
+  const { id } = ctx.params;
+  if (!objectId.isVaild(id)) {
+    ctx.status = 400; // Bad Request
+    return;
+  }
+  return next();
+};
 
 /*
 POST /api/posts
@@ -61,40 +73,6 @@ export const remove = async (ctx) => {
   }
 };
 
-// /* 포스트 수정(교체)
-// PUT /api/posts/:id
-// { title, body }
-// */
-// export const replace = (ctx) => {
-//   // PUT 메서드는 전체 포스트 정보를 입력하여 데이터를 통째로 교체할 때 사용합니다.
-//   const { id } = ctx.params;
-//   // 해당 id를 가진 post가 몇 번째인지 확인합니다.
-//   const index = posts.findIndex((p) => p.id.toString() === id);
-//   // 포스트가 없으면 오류를 반환합니다.
-//   if (index === -1) {
-//     ctx.status = 404;
-//     ctx.body = {
-//       message: '포스트가 존재하지 않습니다.',
-//     };
-//     return;
-//   }
-//   // 전체 객체를 덮어씌웁니다.
-//   // 따라서 id를 제외한 기존 정보를 날리고, 객체를 새로 만듭니다.
-//   posts[index] = {
-//     id,
-//     ...ctx.request.body,
-//   };
-//   ctx.body = posts[index];
-// };
-
-/*
-  PATCH /api/posts/:id
-  {
-    title: '수정',
-    body: '수정 내용',
-    tags: ['수정', '태그']
-  }
-*/
 export const update = async (ctx) => {
   const { id } = ctx.params;
   try {
