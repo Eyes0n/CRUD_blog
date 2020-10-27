@@ -54,6 +54,7 @@ export const list = async (ctx) => {
   try {
     const posts = await Post.find()
       .sort({ _id: -1 }) // { key: 1 or -1 }: key=정렬할 필드 1=오름차순 -1=내림차순
+      .limit(10) // 갯수 제한
       .exec();
     ctx.body = posts;
   } catch (e) {
