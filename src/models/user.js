@@ -8,8 +8,8 @@ const UserSchema = new Schema({
 
 /*  
 Model Method
-  1.Instance of Document Method 
-    user.setPassword() checkpassword()
+  1.Instance(of Document) Method 
+    user.setPassword() checkpassword() serailize
   2.Static Method(Model Instance=Document)
     findByUsername()
 */
@@ -23,6 +23,12 @@ UserSchema.methods.checkPassword = async function (password) {
   return result; // true||false
 };
 
+UserSchema.methods.serialize = function () {
+  // 응답할 데이터에서 hashedPassword 제거
+  const data = this.toJSON();
+  delete data.hashedPassword;
+  return data;
+};
 UserSchema.statics.findByUsername = async function (username) {
   return this.findOne({ username }); // this -> User(model instance = doc)
 };
