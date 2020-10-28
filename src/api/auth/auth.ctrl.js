@@ -38,6 +38,13 @@ export const register = async (ctx) => {
 
     // serialize(): 응답할 데이터에서 hashedPassword 제거
     ctx.body = user.serialize();
+
+    // jwt
+    const token = user.generateToken();
+    ctx.cookies.set('access_token', token, {
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
+      httpOnly: true,
+    });
   } catch (error) {
     ctx.throw(500, error);
   }
@@ -73,6 +80,13 @@ export const login = async (ctx) => {
       ctx.status = 401; // Unauthorized
     }
     ctx.body = user.serialize();
+
+    // jwt발급
+    const token = user.generateToken();
+    ctx.cookies.set('access_token', token, {
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
+      httpOnly: true,
+    });
   } catch (error) {
     ctx.throw(500, error);
   }
