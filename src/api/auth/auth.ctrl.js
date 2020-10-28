@@ -36,16 +36,46 @@ export const register = async (ctx) => {
     await user.setPassword(password); // password 설정
     await user.save(); // DB에 저장
 
-    // 응답할 데이터에서 hashedPassword 제거
-    const data = user.serialize();
-    ctx.body = data;
+    // serialize(): 응답할 데이터에서 hashedPassword 제거
+    ctx.body = user.serialize();
   } catch (error) {
     ctx.throw(500, error);
   }
 };
 
+/*
+  POST /api/auth/login
+  {
+    username: 'velopert',
+    password: 'mypass123'
+  }
+*/
 export const login = async (ctx) => {
-  // 로그인
+  const { username, password } = ctx.request.body;
+
+  // username, passwored 가 없으면 에러 처리
+  if (!username || !password) {
+    ctx.status = 401; // Unauthorized
+    return;
+  }
+
+  try {
+    const user = await User.findByUsername(username);
+    // 계정이 존해하지 않으면 에러 처리
+    if (!user) {
+      ctx.status = 401; // Unauthorized
+      return;
+    }
+
+    const valid = await user.checkPassword(password);
+    // 잘못된 비밀번호
+    if (!valid) {
+      ctx.status = 401; // Unauthorized
+    }
+    ctx.body = user.serialize();
+  } catch (error) {
+    ctx.throw(500, error);
+  }
 };
 
 export const check = async (ctx) => {
