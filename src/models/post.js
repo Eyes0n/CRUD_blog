@@ -11,6 +11,10 @@ const PostSchema = new Schema({
     type: Date,
     default: Date.now, // 현재 날짜를 기본값으로 지정
   },
+  user: {
+    _id: mongoose.Types.ObjectId,
+    username: String,
+  },
 });
 
 // Post 모델 생성
