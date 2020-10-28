@@ -105,6 +105,10 @@ export const check = async (ctx) => {
   ctx.body = user;
 };
 
+/*
+  POST /api/auth/logout
+*/
 export const logout = async (ctx) => {
-  // 로그아웃
+  ctx.cookies.set('access_token'); // access_token 비우기
+  ctx.status = 204; // No Content
 };
