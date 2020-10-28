@@ -9,7 +9,7 @@ const jwtMiddleware = async (ctx, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     // decoded를 미들웨어에서 사용할려면 ctx.state에 넣어준다
     ctx.state.user = {
-      id: decoded.id,
+      _id: decoded._id,
       username: decoded.username,
     };
     console.log('decoded JWT:', decoded);
