@@ -2,11 +2,11 @@ import Post from '../../models/post';
 import mongoose from 'mongoose';
 import Joi from 'joi';
 
-const { objectId } = mongoose.Types;
+const { ObjectId } = mongoose.Types;
 
 export const getPostById = async (ctx, next) => {
   const { id } = ctx.params;
-  if (!objectId.isVaild(id)) {
+  if (!ObjectId.isValid(id)) {
     ctx.status = 400; // Bad Request
     return;
   }
@@ -101,18 +101,8 @@ export const list = async (ctx) => {
 /* 특정 포스트 조회
 GET /api/posts/:id
 */
-export const read = async (ctx) => {
-  const { id } = ctx.params;
-  try {
-    const post = await Post.findById(id).exec();
-    if (!post) {
-      ctx.status = 404;
-      return;
-    }
-    ctx.body = post;
-  } catch (e) {
-    ctx.throw(500, e);
-  }
+export const read = (ctx) => {
+  ctx.body = ctx.state.post;
 };
 
 /* 특정 포스트 제거
