@@ -134,6 +134,14 @@ export const remove = async (ctx) => {
   }
 };
 
+/*
+  PATCH /api/posts/:id
+  {
+    title: ‘수정’,
+    body: ‘수정 내용’,
+    tags: [‘수정’, ‘태그’]
+  }
+*/
 export const update = async (ctx) => {
   const { id } = ctx.params;
 
